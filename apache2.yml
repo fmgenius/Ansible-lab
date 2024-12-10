@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+
+    - name: Update the apt package index
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages to the latest version
+      apt:
+        name: "*"
+        state: latest
+  
+    - name: Install Apache2 Package
+      apt:
+        name: apache2
+        state: present
