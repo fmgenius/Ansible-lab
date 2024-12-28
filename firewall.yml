@@ -1,5 +1,5 @@
 ---
-- name: Configure firewall for Apache
+- name: Configure firewall for Apache (ports 80 and 443) on Ubuntu and CentOS
   hosts: all
   become: yes
   tasks:
@@ -8,13 +8,51 @@
         rule: allow
         port: 80
         proto: tcp
+      when: ansible_distribution == "Ubuntu"
 
     - name: Allow HTTPS (port 443) through UFW
       ansible.builtin.ufw:
         rule: allow
         port: 443
         proto: tcp
+      when: ansible_distribution == "Ubuntu"
 
     - name: Reload UFW to apply changes
       ansible.builtin.command: ufw reload
-      when: ansible_facts['os_family'] == 'Debian'  # Optional: limit to UFW-supported systems
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Ensure firewalld is installed
+      yum:
+        name: firewalld
+        state: present
+      when: ansible_distribution == "CentOS"
+
+    - name: Ensure firewalld is running and enabled
+      service:
+        name: firewalld
+        state: started
+        enabled: true
+      when: ansible_distribution == "CentOS"
+
+    - name: Allow HTTP service (port 80)
+      firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+      when: ansible_distribution == "CentOS"
+
+    - name: Allow HTTPS service (port 443)
+      firewalld:
+        service: https
+        permanent: true
+        state: enabled
+        immediate: true
+      when: ansible_distribution == "CentOS"
+
+    - name: Reload firewalld to apply changes
+      firewalld:
+        state: present
+        permanent: true
+        immediate: false
+      when: ansible_distribution == "CentOS"

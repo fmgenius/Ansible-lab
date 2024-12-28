@@ -1,2 +1,6 @@
-104.156.250.174
-107.191.42.65
+[webservers]
+104.156.250.174       ansible_user=linuxuser
+107.191.42.65         ansible_user=linuxuser
+66.135.26.165         ansible_user=root
+
+
