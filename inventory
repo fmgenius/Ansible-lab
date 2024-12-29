@@ -1,6 +1,16 @@
-[webservers]
+# [webservers]
+# 104.156.250.174       ansible_user=linuxuser
+# 107.191.42.65         ansible_user=linuxuser
+# 66.135.26.165         ansible_user=root
+
+[web_servers]
 104.156.250.174       ansible_user=linuxuser
-107.191.42.65         ansible_user=linuxuser
 66.135.26.165         ansible_user=root
 
+[db_servers]
+107.191.42.65         ansible_user=linuxuser
+
+[file_servers]
+66.135.26.165         ansible_user=root
+107.191.42.65         ansible_user=linuxuser
 
