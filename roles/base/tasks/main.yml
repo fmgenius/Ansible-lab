@@ -1,0 +1,4 @@
+- name: Add SSH key for Genius
+  authorized_key:
+    user: Genius
+    key: "{{ lookup('file', '~/.ssh/ansible.pub') }}"
