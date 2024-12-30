@@ -1,0 +1,43 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+ 
+  - name: install updates (CentOS)
+    tags: always
+    dnf:
+       update_only: yes
+       update_cache: yes
+    when: ansible_distribution == "CentOS"
+ 
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Create Genius user
+    user:
+      name: Genius
+      group: root
+
+
+  - name: Add SSH key for Genius
+    authorized_key:
+      user: Genius
+      state: present
+      key: "{{ lookup('file', '~/.ssh/ansible.pub') }}"
+     
+
+  - name: Add sudoers file for Genius
+    copy:
+      src: sudoer_genius
+      dest: /etc/sudoers.d/genius
+      owner: root
+      group: root
+      mode: 0440
