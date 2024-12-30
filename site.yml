@@ -24,7 +24,8 @@
   - name: Add SSH key for Genius
     authorized_key:
       user: Genius
-      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICokAsBrj5ZFu+5klHvQyf+kHAluJtuJobTuX+IhJ3iB ansible"
+      state: present
+      key: "{{ lookup('file', '~/.ssh/ansible.pub') }}"
 
 
 - hosts: workstations
